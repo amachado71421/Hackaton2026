@@ -117,3 +117,15 @@
 .link-text:hover {
   text-decoration: underline;
 }
+
+/* Estilos para mensajes de error */
+.error-message {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+}

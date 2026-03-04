@@ -4,27 +4,55 @@ import '../../styles/Registro.css';
 
 const Register = () => {
   const [userType, setUserType] = useState('aspirante'); // Estado para guardar el rol
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState(''); // Estado para errores
   const navigate = useNavigate(); // Hook para redirigir
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+    // Limpiar error cuando el usuario comienza a escribir
+    if (error) setError('');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Redirigir basado en el rol seleccionado
+    // Validar que las contraseñas coincidan
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+
+    // Validar longitud mínima de contraseña
+    if (formData.password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+    
+    // Redirigir basado en el rol seleccionado (corregido para coincidir con Routes.jsx)
     switch (userType) {
       case 'aspirante':
-        navigate('/registro-aspirante');
+        navigate('/registro/pasantes');
         break;
       case 'practicante':
-        navigate('/registro-practicante');
+        navigate('/registro/empleados');
         break;
       case 'empresa':
-        navigate('/registro-empresa');
+        navigate('/registro/empresas');
         break;
       case 'institucion':
-        navigate('/registro-institucion');
+        navigate('/registro/institucion');
         break;
       default:
-        // Opcional: manejar un caso por defecto
         console.log("Por favor, selecciona un tipo de cuenta.");
     }
   };
@@ -53,8 +81,11 @@ const Register = () => {
           <div className="form-group">
             <input 
               type="text" 
+              name="nombre"
               className="pill-input" 
               placeholder="Nombre completo" 
+              value={formData.nombre}
+              onChange={handleChange}
               required 
             />
           </div>
@@ -62,8 +93,11 @@ const Register = () => {
           <div className="form-group">
             <input 
               type="email" 
+              name="email"
               className="pill-input" 
               placeholder="Correo electrónico" 
+              value={formData.email}
+              onChange={handleChange}
               required 
             />
           </div>
@@ -71,8 +105,11 @@ const Register = () => {
           <div className="form-group">
             <input 
               type="password" 
+              name="password"
               className="pill-input" 
               placeholder="Contraseña" 
+              value={formData.password}
+              onChange={handleChange}
               required 
             />
           </div>
@@ -80,11 +117,17 @@ const Register = () => {
           <div className="form-group">
             <input 
               type="password" 
+              name="confirmPassword"
               className="pill-input" 
               placeholder="Confirmar contraseña" 
+              value={formData.confirmPassword}
+              onChange={handleChange}
               required 
             />
           </div>
+
+          {/* Mensaje de error */}
+          {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="btn-primary-pill">
             SIGUIENTE
